@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener
 
 class MyGdxGame : ApplicationAdapter() {
     lateinit var img: Texture
@@ -16,18 +18,21 @@ class MyGdxGame : ApplicationAdapter() {
         img = Texture("badlogic.jpg")
 
         actor = MyActor(img)
+        actor.apply {
+            addListener(object : DragListener() {
+                override fun drag(event: InputEvent, x: Float, y: Float, pointer: Int) {
+                    Gdx.app.log("Drag", "${event.type} <$pointer, $x, $y>")
+                    // 会闪，连续两次的xy不正常，
+                    setPosition(x, y)
+                }
+            })
+        }
 
         stage = MyStage()
         Gdx.input.inputProcessor = stage
         stage.apply {
             addActor(actor)
-            stage.addListener { event ->
-                // 返回false监听不到拖动和提起，只有点击和键盘事件，
-                Gdx.app.log("Stage", event.toString())
-                true
-            }
         }
-
     }
 
     override fun render() {

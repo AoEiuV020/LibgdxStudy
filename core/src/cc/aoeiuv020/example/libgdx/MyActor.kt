@@ -1,6 +1,5 @@
 package cc.aoeiuv020.example.libgdx
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.Sprite
@@ -19,10 +18,14 @@ class MyActor(texture: Texture) : Actor() {
             // 设置旋转中心，
             setOriginCenter()
         }
+        setBounds(sprite.x, sprite.y, sprite.width, sprite.height)
+    }
+
+    override fun positionChanged() {
+        sprite.setPosition(x, y)
     }
 
     override fun act(delta: Float) {
-        sprite.rotation += 360 * Gdx.graphics.deltaTime
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {
