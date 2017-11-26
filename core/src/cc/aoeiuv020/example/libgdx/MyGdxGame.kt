@@ -19,8 +19,9 @@ class MyGdxGame : ApplicationAdapter() {
 
         sprite = Sprite(img)
         sprite.apply {
-            // setCenter设置中点位置，
-            setCenter(0f, 0f)
+            setBounds(100f, 200f, 200f, 100f)
+            // 设置旋转中心，
+            setOriginCenter()
         }
     }
 
@@ -28,6 +29,8 @@ class MyGdxGame : ApplicationAdapter() {
         Gdx.gl.glClearColor(1f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         batch.begin()
+
+        sprite.rotation += 360 * Gdx.graphics.deltaTime
 
         sprite.draw(batch)
 
