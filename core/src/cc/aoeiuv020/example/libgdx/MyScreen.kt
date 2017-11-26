@@ -2,13 +2,17 @@ package cc.aoeiuv020.example.libgdx
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.ScreenAdapter
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.StretchViewport
 
@@ -18,7 +22,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport
  */
 class MyScreen : ScreenAdapter() {
     val texture: Texture
-    val actor: Image
+    val actor: Actor
     val stage: Stage
 
     init {
@@ -28,12 +32,12 @@ class MyScreen : ScreenAdapter() {
         // 256 * 256
         texture = Texture("badlogic.jpg")
 
-        actor = Image(texture)
-        actor.apply {
+        actor = Label("Hello", Label.LabelStyle().apply {
+            font = BitmapFont()
+            fontColor = Color.GREEN
+        }).apply {
+            style.background = Image(texture).drawable
             setPosition(100f, 200f)
-            // 两边压缩，中点还是中点，
-            setScale(0.2f, 1f)
-            setOrigin(width / 2, height / 2)
         }
 
         stage = Stage(viewPort)
