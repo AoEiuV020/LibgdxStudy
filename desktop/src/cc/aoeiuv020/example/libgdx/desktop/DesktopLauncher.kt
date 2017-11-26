@@ -9,8 +9,8 @@ object DesktopLauncher {
     fun main(arg: Array<String>) {
         val config = LwjglApplicationConfiguration()
         config.apply {
-            width = 800
-            height = 480
+            width = 1024
+            height = 512
         }
         LwjglApplication(MyGdxGame(), config)
     }
