@@ -18,9 +18,16 @@ class MyGdxGame : ApplicationAdapter() {
         actor = MyActor(img)
 
         stage = MyStage()
+        Gdx.input.inputProcessor = stage
         stage.apply {
             addActor(actor)
+            stage.addListener { event ->
+                // 返回false监听不到拖动和提起，只有点击和键盘事件，
+                Gdx.app.log("Stage", event.toString())
+                true
+            }
         }
+
     }
 
     override fun render() {
