@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.StretchViewport
 
 /**
@@ -34,9 +36,19 @@ class MyScreen : ScreenAdapter() {
         Gdx.input.inputProcessor = stage
         stage.apply {
             addActor(actor)
-            addListener(object : DragListener() {
-                override fun drag(event: InputEvent, x: Float, y: Float, pointer: Int) {
-                    Gdx.app.log("Drag ", "${event.type} <$x, $y>")
+            addListener(object : ClickListener() {
+
+                init {
+                }
+
+                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    Gdx.app.log("Click", "<$x, $y>")
+                    // 每次都要new一个，复用无效，
+                    val action = SequenceAction()
+                    action.addAction(Actions.moveBy(100f, 0f, 0.5f))
+                    action.addAction(Actions.moveBy(0f, 100f, 0.5f))
+                    action.addAction(Actions.moveBy(-100f, -100f, 0.5f))
+                    actor.addAction(action)
                 }
             })
         }

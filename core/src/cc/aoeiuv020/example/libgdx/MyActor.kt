@@ -25,9 +25,6 @@ class MyActor(texture: Texture) : Actor() {
         sprite.setPosition(x, y)
     }
 
-    override fun act(delta: Float) {
-    }
-
     override fun draw(batch: Batch, parentAlpha: Float) {
         sprite.draw(batch)
     }
