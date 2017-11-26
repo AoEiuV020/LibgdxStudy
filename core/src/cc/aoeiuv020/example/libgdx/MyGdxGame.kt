@@ -18,6 +18,8 @@ class MyGdxGame : ApplicationAdapter() {
         img = Texture("badlogic.jpg")
 
         sprite = Sprite(img)
+        // 改了大小不影响旋转中心，
+        sprite.setSize(50f, 100f)
         sprite.setPosition(100f, 200f)
     }
 
@@ -26,12 +28,8 @@ class MyGdxGame : ApplicationAdapter() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         batch.begin()
 
-        sprite.draw(batch)
-        // 原地旋转，覆盖上面的，
-        sprite.rotation = 90f
-        sprite.draw(batch)
-        // 中心旋转，得到八角形，
-        sprite.rotation = 45f
+        val delay = Gdx.graphics.deltaTime
+        sprite.rotation += 360 * (delay)
         sprite.draw(batch)
 
         batch.end()
