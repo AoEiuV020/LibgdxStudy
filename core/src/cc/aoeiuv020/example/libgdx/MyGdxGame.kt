@@ -21,9 +21,9 @@ class MyGdxGame : ApplicationAdapter() {
         actor.apply {
             addListener(object : DragListener() {
                 override fun drag(event: InputEvent, x: Float, y: Float, pointer: Int) {
-                    Gdx.app.log("Drag", "${event.type} <$pointer, $x, $y>")
+                    Gdx.app.log("Drag ", "${event.type} <$x, $y>")
                     // 会闪，连续两次的xy不正常，
-                    setPosition(x, y)
+                    moveBy(x - width / 2, y - height / 2)
                 }
             })
         }
