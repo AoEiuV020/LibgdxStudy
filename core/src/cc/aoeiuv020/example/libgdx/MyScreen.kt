@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.StretchViewport
 
@@ -17,8 +17,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport
  * Created by AoEiuV020 on 2017.11.26-20:36:39.
  */
 class MyScreen : ScreenAdapter() {
-    val img: Texture
-    val actor: Actor
+    val texture: Texture
+    val actor: Image
     val stage: Stage
 
     init {
@@ -26,10 +26,14 @@ class MyScreen : ScreenAdapter() {
         val viewPort = StretchViewport(1024f, 512f)
 
         // 256 * 256
-        img = Texture("badlogic.jpg")
+        texture = Texture("badlogic.jpg")
 
-        actor = MyActor(img)
+        actor = Image(texture)
         actor.apply {
+            setPosition(100f, 200f)
+            // 两边压缩，中点还是中点，
+            setScale(0.2f, 1f)
+            setOrigin(width / 2, height / 2)
         }
 
         stage = Stage(viewPort)
@@ -60,12 +64,15 @@ class MyScreen : ScreenAdapter() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         stage.act(delta)
+
+        actor.rotation += 360 * delta
+
         stage.draw()
 
     }
 
     override fun dispose() {
         stage.dispose()
-        img.dispose()
+        texture.dispose()
     }
 }
