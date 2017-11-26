@@ -31,6 +31,6 @@ class MyActor(texture: Texture) : Actor() {
     override fun draw(batch: Batch, parentAlpha: Float) {
         sprite.draw(batch)
         // 默认字体图片不支持中文，支持换行，
-        font.draw(stage.batch, "Hello\nWorld<>?\n试试中文", 30f, 60f)
+        font.draw(stage.batch, "Hel夹中文lo\nWorld<>?\n试试中文", 30f, 60f)
     }
 }
