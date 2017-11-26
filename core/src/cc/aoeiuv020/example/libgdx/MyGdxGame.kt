@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener
+import com.badlogic.gdx.utils.viewport.StretchViewport
 
 class MyGdxGame : ApplicationAdapter() {
     lateinit var img: Texture
@@ -15,30 +16,25 @@ class MyGdxGame : ApplicationAdapter() {
     lateinit var stage: Stage
 
     override fun create() {
+        // touch事件的xy范围也是限制这么大了，
+        val viewPort = StretchViewport(1024f, 512f)
+
+        // 256 * 256
         img = Texture("badlogic.jpg")
 
         actor = MyActor(img)
         actor.apply {
-            addListener(object : DragListener() {
-                var startX = 0f
-                var startY = 0f
-                override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                    startX = x
-                    startY = y
-                    return super.touchDown(event, x, y, pointer, button)
-                }
-                override fun drag(event: InputEvent, x: Float, y: Float, pointer: Int) {
-                    Gdx.app.log("Drag ", "${event.type} <$x, $y>")
-                    // 会闪，连续两次的xy不正常，
-                    moveBy(x - startX, y - startY)
-                }
-            })
         }
 
-        stage = MyStage()
+        stage = Stage(viewPort)
         Gdx.input.inputProcessor = stage
         stage.apply {
             addActor(actor)
+            addListener(object : DragListener() {
+                override fun drag(event: InputEvent, x: Float, y: Float, pointer: Int) {
+                    Gdx.app.log("Drag ", "${event.type} <$x, $y>")
+                }
+            })
         }
     }
 
