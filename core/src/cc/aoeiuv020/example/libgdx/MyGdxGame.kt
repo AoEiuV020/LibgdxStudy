@@ -30,6 +30,9 @@ class MyGdxGame : ApplicationAdapter() {
         // 原地旋转，覆盖上面的，
         sprite.rotation = 90f
         sprite.draw(batch)
+        // 中心旋转，得到八角形，
+        sprite.rotation = 45f
+        sprite.draw(batch)
 
         batch.end()
     }
