@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -36,7 +37,7 @@ class MyScreen : ScreenAdapter() {
             font = BitmapFont()
             fontColor = Color.GREEN
         }).apply {
-            style.background = Image(texture).drawable
+            style.background = Image(Texture(Pixmap(1, 1, Pixmap.Format.RGB888).apply { setColor(Color.WHITE); fill() })).drawable
             setPosition(100f, 200f)
         }
 
