@@ -20,10 +20,17 @@ class MyGdxGame : ApplicationAdapter() {
         actor = MyActor(img)
         actor.apply {
             addListener(object : DragListener() {
+                var startX = 0f
+                var startY = 0f
+                override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                    startX = x
+                    startY = y
+                    return super.touchDown(event, x, y, pointer, button)
+                }
                 override fun drag(event: InputEvent, x: Float, y: Float, pointer: Int) {
                     Gdx.app.log("Drag ", "${event.type} <$x, $y>")
                     // 会闪，连续两次的xy不正常，
-                    moveBy(x - width / 2, y - height / 2)
+                    moveBy(x - startX, y - startY)
                 }
             })
         }
