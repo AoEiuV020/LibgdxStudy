@@ -17,9 +17,9 @@ import com.badlogic.gdx.utils.viewport.StretchViewport
  * Created by AoEiuV020 on 2017.11.26-20:36:39.
  */
 class MyScreen : ScreenAdapter() {
-    var img: Texture
-    var actor: Actor
-    var stage: Stage
+    val img: Texture
+    val actor: Actor
+    val stage: Stage
 
     init {
         // touch事件的xy范围也是限制这么大了，
@@ -52,6 +52,7 @@ class MyScreen : ScreenAdapter() {
                 }
             })
         }
+
     }
 
     override fun render(delta: Float) {
