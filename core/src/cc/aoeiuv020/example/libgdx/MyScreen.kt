@@ -58,7 +58,7 @@ class MyScreen : ScreenAdapter() {
         Gdx.gl.glClearColor(1f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        stage.act()
+        stage.act(delta)
         stage.draw()
 
     }
