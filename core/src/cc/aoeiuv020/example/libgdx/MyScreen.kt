@@ -4,12 +4,14 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.StretchViewport
 
 /**
@@ -20,6 +22,7 @@ class MyScreen : ScreenAdapter() {
     val texture: Texture
     val actor: Actor
     val stage: Stage
+    private val defaultFont = BitmapFont()
     private val atlas: TextureAtlas
 
     init {
@@ -31,15 +34,17 @@ class MyScreen : ScreenAdapter() {
 
         atlas = TextureAtlas("button/button.atlas")
 
-        actor = Image(texture).apply {
+        actor = TextButton("Start", TextButton.TextButtonStyle().apply {
+            up = TextureRegionDrawable(atlas.findRegion("button", 1))
+            down = TextureRegionDrawable(atlas.findRegion("button", 2))
+            font = defaultFont
+        }).apply {
             setPosition(100f, 200f)
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     Gdx.app.log("Click", "<$x, $y>")
                 }
             })
-
-            rotation = 45f
         }
 
         stage = Stage(viewPort)
@@ -64,5 +69,6 @@ class MyScreen : ScreenAdapter() {
         stage.dispose()
         texture.dispose()
         atlas.dispose()
+        defaultFont.dispose()
     }
 }
