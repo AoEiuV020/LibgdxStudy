@@ -13,9 +13,6 @@ import com.badlogic.gdx.utils.Pool
  * Created by AoEiuV020 on 2017.11.27-12:34:06.
  */
 class Bullet : Image(texture.findRegion("right")), Pool.Poolable {
-    private var pool: BulletPool? = null
-    private lateinit var action: Action
-
     companion object : Disposable {
 
         private val texture = TextureAtlas("bullet.atlas")
@@ -24,6 +21,9 @@ class Bullet : Image(texture.findRegion("right")), Pool.Poolable {
             texture.dispose()
         }
     }
+
+    private var pool: BulletPool? = null
+    private lateinit var action: Action
 
     init {
         setSize(40f, 20f)

@@ -24,21 +24,41 @@ class MyScreen : ScreenAdapter() {
 
         pool = BulletPool()
 
+        val hero1 = Hero().apply { left() }
+        val hero2 = Hero().apply { right() }
+
         stage = Stage(viewPort)
+
+        stage.addActor(hero1)
+        stage.addActor(hero2)
+
         Gdx.input.inputProcessor = stage
         stage.apply {
             addListener(object : InputListener() {
-                override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                private val pointerMap = mutableMapOf<Int, Int>()
+                private fun move(button: Int, x: Float, y: Float) {
+                    when (button) {
+                        Input.Buttons.LEFT -> hero1.move(x, y)
+                        Input.Buttons.RIGHT -> hero2.move(x, y)
+                    }
+                }
+
+                override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                    pointerMap.put(pointer, button)
+                    move(button, x, y)
                     return true
+                }
+
+                override fun touchDragged(event: InputEvent, x: Float, y: Float, pointer: Int) {
+                    move(pointerMap[pointer]!!, x, y)
                 }
 
                 override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
                     Gdx.app.log("Fire", "<$x, $y>")
                     when (event.button) {
-                        Input.Buttons.LEFT -> pool.fire()?.apply { fireLeft(x, y) }
-                        Input.Buttons.RIGHT -> pool.fire()?.apply { fireRight(x, y) }
-                        else -> null
-                    }?.let { stage.addActor(it) }
+                        Input.Buttons.LEFT -> hero1.fire()
+                        Input.Buttons.RIGHT -> hero2.fire()
+                    }
                 }
             })
         }
@@ -58,5 +78,6 @@ class MyScreen : ScreenAdapter() {
         stage.dispose()
         pool.dispose()
         Bullet.dispose()
+        Hero.dispose()
     }
 }
