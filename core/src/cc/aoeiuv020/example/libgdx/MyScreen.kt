@@ -1,6 +1,7 @@
 package cc.aoeiuv020.example.libgdx
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -31,16 +32,16 @@ class MyScreen : ScreenAdapter() {
                     return true
                 }
 
-                override fun touchUp(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int) {
+                override fun touchUp(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int) {
                     Gdx.app.log("Fire", "<$x, $y>")
-                    pool.fire()?.let {
-                        it.setPosition(x, y)
-                        stage.addActor(it)
-                    }
+                    when (event.button) {
+                        Input.Buttons.LEFT -> pool.fire()?.apply { fireLeft(x, y) }
+                        Input.Buttons.RIGHT -> pool.fire()?.apply { fireRight(x, y) }
+                        else -> null
+                    }?.let { stage.addActor(it) }
                 }
             })
         }
-
     }
 
     override fun render(delta: Float) {

@@ -1,6 +1,7 @@
 package cc.aoeiuv020.example.libgdx
 
-import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -11,9 +12,13 @@ import com.badlogic.gdx.utils.Pool
  *
  * Created by AoEiuV020 on 2017.11.27-12:34:06.
  */
-class Bullet(private val pool: BulletPool) : Image(texture), Pool.Poolable {
+class Bullet : Image(texture.findRegion("right")), Pool.Poolable {
+    private var pool: BulletPool? = null
+    private lateinit var action: Action
+
     companion object : Disposable {
-        private val texture = Texture("badlogic.jpg")
+
+        private val texture = TextureAtlas("bullet.atlas")
 
         override fun dispose() {
             texture.dispose()
@@ -21,30 +26,60 @@ class Bullet(private val pool: BulletPool) : Image(texture), Pool.Poolable {
     }
 
     init {
-        setSize(20f, 20f)
-        val action = Actions.repeat(RepeatAction.FOREVER, Actions.moveBy(1000f, 0f, 1f))
-        addAction(action)
+        setSize(40f, 20f)
     }
 
     override fun reset() {
     }
 
+    fun fireLeft(x: Float, y: Float) {
+        setPosition(x, y)
+        setLeft()
+    }
+
+    fun fireRight(x: Float, y: Float) {
+        setPosition(x, y)
+
+        setRight()
+    }
+
+    private fun setLeft() {
+        rotation = 180f
+        action = Actions.repeat(RepeatAction.FOREVER, Actions.moveBy(-1000f, 0f, 3f))
+        addAction(action)
+    }
+
+    private fun setRight() {
+        rotation = 0f
+        action = Actions.repeat(RepeatAction.FOREVER, Actions.moveBy(1000f, 0f, 3f))
+        addAction(action)
+    }
+
     override fun act(delta: Float) {
         super.act(delta)
 
-        if (x > stage.width) {
+        if (x > stage.width || x < 0f) {
+            removeAction(action)
             stage.root.removeActor(this)
-            pool.remove(this)
+            pool?.remove(this)
         }
+    }
+
+    fun setPool(bulletPool: BulletPool?) {
+        this.pool = bulletPool
     }
 }
 
-class BulletPool : Pool<Bullet>(), Disposable {
+class BulletPool : Disposable {
+    // 多个BulletPool共用Pool<Bullet>,
+    companion object : Pool<Bullet>() {
+        override fun newObject(): Bullet {
+            return Bullet()
+        }
+    }
+
     private val bulletList = mutableListOf<Bullet>()
     private val bulletCount = 3
-    override fun newObject(): Bullet {
-        return Bullet(this)
-    }
 
     override fun dispose() {
         val list = ArrayList(bulletList)
@@ -56,12 +91,16 @@ class BulletPool : Pool<Bullet>(), Disposable {
     }
 
     fun fire(): Bullet? = if (bulletList.size < bulletCount) {
-        obtain().also { bulletList.add(it) }
+        obtain().also {
+            it.setPool(this)
+            bulletList.add(it)
+        }
     } else {
         null
     }
 
     fun remove(bullet: Bullet) {
+        bullet.setPool(null)
         bulletList.remove(bullet)
         free(bullet)
     }
