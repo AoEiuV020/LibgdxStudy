@@ -18,20 +18,20 @@ class MyScreen : ScreenAdapter() {
     private lateinit var hero1: Hero
     private lateinit var hero2: Hero
     private lateinit var background: Background
+    private lateinit var viewPort: FitViewport
 
     init {
         init()
     }
 
     override fun resize(width: Int, height: Int) {
-        init()
+        viewPort.update(width, height)
     }
 
     private fun init() {
         Assets.init()
 
-        // touch事件的xy范围也是限制这么大了，
-        val viewPort = FitViewport(480f, 800f)
+        viewPort = FitViewport(480f, 800f)
         stage = Stage(viewPort)
 
         background = Background()
