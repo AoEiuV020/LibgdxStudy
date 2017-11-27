@@ -1,7 +1,5 @@
 package cc.aoeiuv020.example.libgdx
 
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction
@@ -15,17 +13,7 @@ import com.badlogic.gdx.utils.Pool
  */
 class Bullet(private val pool: BulletPool) : Image(texture), Pool.Poolable {
     companion object : Disposable {
-        private val texture: Texture
-
-        init {
-            val p = Pixmap(20, 20, Pixmap.Format.RGBA8888).apply {
-                setColor(Color.WHITE)
-                fillCircle(width / 2, height / 2, minOf(width, height).let { it / 2 - it / 10 })
-            }
-            texture = Texture(p)
-            p.dispose()
-
-        }
+        private val texture = Texture("badlogic.jpg")
 
         override fun dispose() {
             texture.dispose()
@@ -33,6 +21,7 @@ class Bullet(private val pool: BulletPool) : Image(texture), Pool.Poolable {
     }
 
     init {
+        setSize(20f, 20f)
         val action = Actions.repeat(RepeatAction.FOREVER, Actions.moveBy(1000f, 0f, 1f))
         addAction(action)
     }
