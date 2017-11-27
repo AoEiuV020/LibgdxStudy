@@ -1,6 +1,5 @@
 package cc.aoeiuv020.example.libgdx
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Action
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction
@@ -12,16 +11,7 @@ import com.badlogic.gdx.utils.Pool
  *
  * Created by AoEiuV020 on 2017.11.27-12:34:06.
  */
-class Bullet : Image(texture.findRegion("right")), Pool.Poolable {
-    companion object : Disposable {
-
-        private val texture = TextureAtlas("bullet.atlas")
-
-        override fun dispose() {
-            texture.dispose()
-        }
-    }
-
+class Bullet : Image(Assets.bulletRightTexture), Pool.Poolable {
     private var pool: BulletPool? = null
     private lateinit var action: Action
 

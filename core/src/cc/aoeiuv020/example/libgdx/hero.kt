@@ -1,8 +1,6 @@
 package cc.aoeiuv020.example.libgdx
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Sound
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
@@ -12,23 +10,14 @@ import com.badlogic.gdx.utils.Disposable
  *
  * Created by AoEiuV020 on 2017.11.27-15:52:16.
  */
-class Hero : Image(SpriteDrawable(Sprite(texture))), Disposable {
-    companion object : Disposable {
-
-        private val texture = Texture("badlogic.jpg")
-
-        override fun dispose() {
-            texture.dispose()
-        }
-    }
-
+class Hero : Image(SpriteDrawable(Sprite(Assets.badlogicTexture))), Disposable {
     enum class Direction {
         LEFT, RIGHT
     }
 
     private val bulletPool = BulletPool()
     private var direction = Direction.RIGHT
-    private val pa: Sound = Gdx.audio.newSound(Gdx.files.internal("pa.wav"))
+    private val pa: Sound = Assets.paSound
 
     init {
         setSize(100f, 100f)
@@ -61,6 +50,5 @@ class Hero : Image(SpriteDrawable(Sprite(texture))), Disposable {
 
     override fun dispose() {
         bulletPool.dispose()
-        pa.dispose()
     }
 }

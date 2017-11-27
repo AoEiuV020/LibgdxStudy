@@ -20,6 +20,8 @@ class MyScreen : ScreenAdapter() {
 
     init {
 
+        Assets.init()
+
         // touch事件的xy范围也是限制这么大了，
         val viewPort = StretchViewport(1024f, 512f)
 
@@ -77,7 +79,6 @@ class MyScreen : ScreenAdapter() {
         stage.dispose()
         hero1.dispose()
         hero2.dispose()
-        Bullet.dispose()
-        Hero.dispose()
+        Assets.dispose()
     }
 }
