@@ -2,6 +2,8 @@ package cc.aoeiuv020.example.libgdx
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.audio.Sound
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -16,6 +18,7 @@ object Assets : Disposable {
 
     lateinit var bulletRightTexture: TextureRegion
     lateinit var badlogicTexture: Texture
+    lateinit var circleTexture: Texture
     lateinit var paSound: Sound
 
     fun init() {
@@ -31,9 +34,17 @@ object Assets : Disposable {
         bulletRightTexture = bulletAtlas.findRegion("right")
         badlogicTexture = manager.get("badlogic.jpg")
         paSound = manager.get("pa.wav")
+
+        val p = Pixmap(111, 111, Pixmap.Format.RGBA8888).apply {
+            setColor(Color.WHITE)
+            fillCircle(width / 2, height / 2, minOf(width, height) / 2)
+        }
+        circleTexture = Texture(p)
+        p.dispose()
     }
 
     override fun dispose() {
+        circleTexture.dispose()
         manager.dispose()
     }
 }

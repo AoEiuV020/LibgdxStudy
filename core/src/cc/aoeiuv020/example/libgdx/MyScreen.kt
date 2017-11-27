@@ -14,12 +14,19 @@ import com.badlogic.gdx.utils.viewport.StretchViewport
  * Created by AoEiuV020 on 2017.11.26-20:36:39.
  */
 class MyScreen : ScreenAdapter() {
-    private val stage: Stage
-    private val hero1: Hero
-    private val hero2: Hero
+    private lateinit var stage: Stage
+    private lateinit var hero1: Hero
+    private lateinit var hero2: Hero
 
     init {
+        init()
+    }
 
+    override fun resize(width: Int, height: Int) {
+        init()
+    }
+
+    private fun init() {
         Assets.init()
 
         // touch事件的xy范围也是限制这么大了，

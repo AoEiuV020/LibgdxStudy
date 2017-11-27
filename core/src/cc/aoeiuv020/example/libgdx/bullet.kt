@@ -11,12 +11,12 @@ import com.badlogic.gdx.utils.Pool
  *
  * Created by AoEiuV020 on 2017.11.27-12:34:06.
  */
-class Bullet : Image(Assets.bulletRightTexture), Pool.Poolable {
+class Bullet : Image(Assets.circleTexture), Pool.Poolable {
     private var pool: BulletPool? = null
     private lateinit var action: Action
 
     init {
-        setSize(40f, 20f)
+        setSize(20f, 20f)
         setOrigin(width / 2, height / 2)
     }
 
