@@ -34,15 +34,16 @@ class Bullet(private val pool: BulletPool) : Image(texture), Pool.Poolable {
 
         if (x > stage.width) {
             stage.root.removeActor(this)
-            pool.free(this)
+            pool.remove(this)
         }
     }
 }
 
 class BulletPool : Pool<Bullet>(), Disposable {
     private val bulletList = mutableListOf<Bullet>()
+    private val bulletCount = 3
     override fun newObject(): Bullet {
-        return Bullet(this).also { bulletList.add(it) }
+        return Bullet(this)
     }
 
     override fun dispose() {
@@ -52,5 +53,16 @@ class BulletPool : Pool<Bullet>(), Disposable {
             it.stage.root.removeActor(it)
             free(it)
         }
+    }
+
+    fun fire(): Bullet? = if (bulletList.size < bulletCount) {
+        obtain().also { bulletList.add(it) }
+    } else {
+        null
+    }
+
+    fun remove(bullet: Bullet) {
+        bulletList.remove(bullet)
+        free(bullet)
     }
 }

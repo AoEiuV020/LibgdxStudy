@@ -33,10 +33,10 @@ class MyScreen : ScreenAdapter() {
 
                 override fun touchUp(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int) {
                     Gdx.app.log("Fire", "<$x, $y>")
-                    val bullet = pool.obtain().apply {
-                        setPosition(x, y)
+                    pool.fire()?.let {
+                        it.setPosition(x, y)
+                        stage.addActor(it)
                     }
-                    stage.addActor(bullet)
                 }
             })
         }
