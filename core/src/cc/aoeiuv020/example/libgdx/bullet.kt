@@ -27,19 +27,19 @@ class Bullet : Image(texture.findRegion("right")), Pool.Poolable {
 
     init {
         setSize(40f, 20f)
+        setOrigin(width / 2, height / 2)
     }
 
     override fun reset() {
     }
 
     fun fireLeft(x: Float, y: Float) {
-        setPosition(x, y)
+        setPosition(x - width / 2, y - height / 2)
         setLeft()
     }
 
     fun fireRight(x: Float, y: Float) {
-        setPosition(x, y)
-
+        setPosition(x - width / 2, y - height / 2)
         setRight()
     }
 
