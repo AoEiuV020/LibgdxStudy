@@ -32,8 +32,6 @@ class Bullet(private val pool: BulletPool) : Image(texture), Pool.Poolable {
         }
     }
 
-    private var alive = false
-
     init {
         val action = RepeatAction().apply {
             count = RepeatAction.FOREVER
@@ -43,7 +41,6 @@ class Bullet(private val pool: BulletPool) : Image(texture), Pool.Poolable {
     }
 
     override fun reset() {
-        alive = true
     }
 
     override fun act(delta: Float) {
