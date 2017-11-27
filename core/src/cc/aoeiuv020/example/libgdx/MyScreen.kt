@@ -2,19 +2,15 @@ package cc.aoeiuv020.example.libgdx
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.ScreenAdapter
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction
-import com.badlogic.gdx.scenes.scene2d.ui.Image
-import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.StretchViewport
 
 /**
@@ -25,6 +21,7 @@ class MyScreen : ScreenAdapter() {
     val texture: Texture
     val actor: Actor
     val stage: Stage
+    private val atlas: TextureAtlas
 
     init {
         // touch事件的xy范围也是限制这么大了，
@@ -33,33 +30,24 @@ class MyScreen : ScreenAdapter() {
         // 256 * 256
         texture = Texture("badlogic.jpg")
 
-        actor = Label("Hello", Label.LabelStyle().apply {
-            font = BitmapFont()
-            fontColor = Color.GREEN
+        atlas = TextureAtlas("button/button.atlas")
+
+        actor = Button(Button.ButtonStyle().apply {
+            up = TextureRegionDrawable(atlas.findRegion("button", 1))
+            down = TextureRegionDrawable(atlas.findRegion("button", 2))
         }).apply {
-            style.background = Image(Texture(Pixmap(1, 1, Pixmap.Format.RGB888).apply { setColor(Color.WHITE); fill() })).drawable
             setPosition(100f, 200f)
+            addListener(object : ClickListener() {
+                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    Gdx.app.log("Click", "<$x, $y>")
+                }
+            })
         }
 
         stage = Stage(viewPort)
         Gdx.input.inputProcessor = stage
         stage.apply {
             addActor(actor)
-            addListener(object : ClickListener() {
-
-                init {
-                }
-
-                override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                    Gdx.app.log("Click", "<$x, $y>")
-                    // 每次都要new一个，复用无效，
-                    val action = SequenceAction()
-                    action.addAction(Actions.moveBy(100f, 0f, 0.5f))
-                    action.addAction(Actions.moveBy(0f, 100f, 0.5f))
-                    action.addAction(Actions.moveBy(-100f, -100f, 0.5f))
-                    actor.addAction(action)
-                }
-            })
         }
 
     }
@@ -79,5 +67,6 @@ class MyScreen : ScreenAdapter() {
     override fun dispose() {
         stage.dispose()
         texture.dispose()
+        atlas.dispose()
     }
 }
