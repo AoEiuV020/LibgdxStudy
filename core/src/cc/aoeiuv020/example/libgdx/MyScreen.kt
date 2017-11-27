@@ -19,6 +19,7 @@ class MyScreen : ScreenAdapter() {
     private val hero2: Hero
 
     init {
+
         // touch事件的xy范围也是限制这么大了，
         val viewPort = StretchViewport(1024f, 512f)
 

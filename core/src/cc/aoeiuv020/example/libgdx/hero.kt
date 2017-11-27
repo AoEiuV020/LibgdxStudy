@@ -1,5 +1,7 @@
 package cc.aoeiuv020.example.libgdx
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -26,6 +28,7 @@ class Hero : Image(SpriteDrawable(Sprite(texture))), Disposable {
 
     private val bulletPool = BulletPool()
     private var direction = Direction.RIGHT
+    private val pa: Music = Gdx.audio.newMusic(Gdx.files.internal("pa.wav"))
 
     init {
         setSize(100f, 100f)
@@ -43,10 +46,13 @@ class Hero : Image(SpriteDrawable(Sprite(texture))), Disposable {
 
     fun fire() {
         bulletPool.fire()?.also {
+            if (pa.isPlaying) {
+                pa.stop()
+            }
+            pa.play()
             when (direction) {
                 Direction.LEFT -> it.fireLeft(x + width / 2, y + height / 2)
                 Direction.RIGHT -> it.fireRight(x + width / 2, y + height / 2)
-
             }
             stage.addActor(it)
         }
@@ -58,5 +64,6 @@ class Hero : Image(SpriteDrawable(Sprite(texture))), Disposable {
 
     override fun dispose() {
         bulletPool.dispose()
+        pa.dispose()
     }
 }
