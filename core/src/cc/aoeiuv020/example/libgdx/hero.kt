@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Disposable
  *
  * Created by AoEiuV020 on 2017.11.27-15:52:16.
  */
-class Hero : Image(SpriteDrawable(Sprite(texture))) {
+class Hero : Image(SpriteDrawable(Sprite(texture))), Disposable {
     companion object : Disposable {
 
         private val texture = Texture("badlogic.jpg")
@@ -54,5 +54,9 @@ class Hero : Image(SpriteDrawable(Sprite(texture))) {
 
     fun move(x: Float, y: Float) {
         setPosition(x - width / 2, y - height / 2)
+    }
+
+    override fun dispose() {
+        bulletPool.dispose()
     }
 }
