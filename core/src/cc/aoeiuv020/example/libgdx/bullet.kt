@@ -33,10 +33,7 @@ class Bullet(private val pool: BulletPool) : Image(texture), Pool.Poolable {
     }
 
     init {
-        val action = RepeatAction().apply {
-            count = RepeatAction.FOREVER
-            action = Actions.moveBy(1000f, 0f, 1f)
-        }
+        val action = Actions.repeat(RepeatAction.FOREVER, Actions.moveBy(1000f, 0f, 1f))
         addAction(action)
     }
 
