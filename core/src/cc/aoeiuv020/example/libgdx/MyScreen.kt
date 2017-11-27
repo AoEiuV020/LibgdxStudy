@@ -58,8 +58,6 @@ class MyScreen : ScreenAdapter() {
 
         stage.act(delta)
 
-        actor.rotation += 360 * delta
-
         stage.draw()
 
     }
