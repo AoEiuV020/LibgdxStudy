@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.utils.viewport.StretchViewport
+import com.badlogic.gdx.utils.viewport.FitViewport
 
 /**
  *
@@ -17,6 +17,7 @@ class MyScreen : ScreenAdapter() {
     private lateinit var stage: Stage
     private lateinit var hero1: Hero
     private lateinit var hero2: Hero
+    private lateinit var background: Background
 
     init {
         init()
@@ -30,13 +31,14 @@ class MyScreen : ScreenAdapter() {
         Assets.init()
 
         // touch事件的xy范围也是限制这么大了，
-        val viewPort = StretchViewport(1024f, 512f)
+        val viewPort = FitViewport(480f, 800f)
+        stage = Stage(viewPort)
+
+        background = Background()
+        stage.addActor(background)
 
         hero1 = Hero().apply { left() }
         hero2 = Hero().apply { right() }
-
-        stage = Stage(viewPort)
-
         stage.addActor(hero1)
         stage.addActor(hero2)
 
@@ -86,6 +88,7 @@ class MyScreen : ScreenAdapter() {
         stage.dispose()
         hero1.dispose()
         hero2.dispose()
+        background.dispose()
         Assets.dispose()
     }
 }
