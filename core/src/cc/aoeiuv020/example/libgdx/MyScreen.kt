@@ -8,9 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.StretchViewport
 
 /**
@@ -32,16 +31,15 @@ class MyScreen : ScreenAdapter() {
 
         atlas = TextureAtlas("button/button.atlas")
 
-        actor = Button(Button.ButtonStyle().apply {
-            up = TextureRegionDrawable(atlas.findRegion("button", 1))
-            down = TextureRegionDrawable(atlas.findRegion("button", 2))
-        }).apply {
+        actor = Image(texture).apply {
             setPosition(100f, 200f)
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     Gdx.app.log("Click", "<$x, $y>")
                 }
             })
+
+            rotation = 45f
         }
 
         stage = Stage(viewPort)
