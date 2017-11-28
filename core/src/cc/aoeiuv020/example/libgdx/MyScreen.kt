@@ -33,6 +33,7 @@ class MyScreen : ScreenAdapter() {
         stage = Stage(viewPort)
 
         world = World(Vector2(0f, 0f), true)
+        World.setVelocityThreshold(0f)
         renderer = Box2DDebugRenderer()
 
         Gdx.input.inputProcessor = stage
