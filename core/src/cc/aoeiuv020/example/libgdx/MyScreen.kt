@@ -22,7 +22,7 @@ class MyScreen : ScreenAdapter() {
     init {
         Assets.init()
 
-        viewPort = FitViewport(108f, 72f)
+        viewPort = FitViewport(1f, 0.5f)
         stage = Stage(viewPort)
 
         world = World(Vector2(0f, -10f), true)
@@ -39,24 +39,28 @@ class MyScreen : ScreenAdapter() {
                 position.set(stage.width / 2, stage.height)
             }).apply {
                 val circleShape = CircleShape().apply {
-                    radius = 10f
+                    radius = 0.12f
                 }
                 createFixture(FixtureDef().apply {
                     shape = circleShape
+                    density = 1f
+                    friction = 0f
+                    // 这个为1也会越弹越高，
+                    restitution = 1f
                 })
                 circleShape.dispose()
             }
             createBody(BodyDef().apply {
                 type = BodyDef.BodyType.StaticBody
-                position.set(stage.width / 2 - 10f, 2f)
+                position.set(0f, 0f)
             }).apply {
-                val circleShape = CircleShape().apply {
-                    radius = 10f
+                val edge = EdgeShape().apply {
+                    set(0f, 0.1f, stage.width, 0.1f)
                 }
                 createFixture(FixtureDef().apply {
-                    shape = circleShape
+                    shape = edge
                 })
-                circleShape.dispose()
+                edge.dispose()
             }
         }
     }
