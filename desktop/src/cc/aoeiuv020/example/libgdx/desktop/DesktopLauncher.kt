@@ -11,6 +11,7 @@ object DesktopLauncher {
         config.apply {
             width = 1024
             height = 512
+            foregroundFPS = 111
         }
         LwjglApplication(MyGdxGame(), config)
     }
