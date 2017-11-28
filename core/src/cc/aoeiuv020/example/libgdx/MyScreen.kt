@@ -5,9 +5,14 @@ import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
+import com.badlogic.gdx.physics.box2d.joints.MouseJoint
+import com.badlogic.gdx.physics.box2d.joints.MouseJointDef
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
+
 
 /**
  *
@@ -19,6 +24,7 @@ class MyScreen : ScreenAdapter() {
     private val world: World
     private val renderer: Box2DDebugRenderer
     private lateinit var body: Body
+    private lateinit var ground: Body
 
     init {
         Assets.init()
@@ -32,6 +38,37 @@ class MyScreen : ScreenAdapter() {
         Gdx.input.inputProcessor = stage
 
         stage.apply {
+            addListener(object : InputListener() {
+                private lateinit var mouseJoint: MouseJoint
+                override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                    //我们来定义一个鼠标关节的声明
+                    val mouseJointDef = MouseJointDef()
+                    mouseJointDef.bodyA = ground//设为物理世界的边界
+                    mouseJointDef.bodyB = body//我们想要拖动的物体
+                    //是否检测2个物体间的碰撞，不检测会怎么样？砖块会飞离屏幕！
+                    mouseJointDef.collideConnected = true
+                    //最大力设为砖块质量的1000倍
+                    //设小点会怎么样？砖块响应你的速度会很慢很慢
+                    mouseJointDef.maxForce = 100.0f * body.mass
+                    mouseJointDef.target.x = body.position.x
+                    mouseJointDef.target.y = body.position.y
+                    //好了，让世界生成它吧
+                    mouseJoint = world.createJoint(mouseJointDef) as MouseJoint
+                    //传入目的地坐标
+                    mouseJoint.target = Vector2(x, y)
+
+                    return true
+                }
+
+                override fun touchDragged(event: InputEvent?, x: Float, y: Float, pointer: Int) {
+                    mouseJoint.target = Vector2(x, y)
+
+                }
+
+                override fun touchUp(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int) {
+                    world.destroyJoint(mouseJoint)
+                }
+            })
         }
 
         world.apply {
@@ -50,9 +87,8 @@ class MyScreen : ScreenAdapter() {
                     restitution = 1f
                 })
                 circleShape.dispose()
-                applyLinearImpulse(0.1f, -0.1f, 0f, 0f, false)
             }
-            createBody(BodyDef().apply {
+            ground = createBody(BodyDef().apply {
                 position.set(0f, 0f)
             }).apply {
                 val edge = EdgeShape()
@@ -92,7 +128,6 @@ class MyScreen : ScreenAdapter() {
 
         world.step(delta, 3, 3)
 
-        Gdx.app.log("Body", body.linearVelocity.toString())
 
         renderer.render(world, stage.camera.combined)
     }
