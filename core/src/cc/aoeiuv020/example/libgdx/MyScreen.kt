@@ -18,6 +18,7 @@ class MyScreen : ScreenAdapter() {
     private val viewPort: Viewport
     private val world: World
     private val renderer: Box2DDebugRenderer
+    private lateinit var body: Body
 
     init {
         Assets.init()
@@ -25,7 +26,7 @@ class MyScreen : ScreenAdapter() {
         viewPort = FitViewport(1f, 0.5f)
         stage = Stage(viewPort)
 
-        world = World(Vector2(0f, -10f), true)
+        world = World(Vector2(0f, 0f), true)
         renderer = Box2DDebugRenderer()
 
         Gdx.input.inputProcessor = stage
@@ -34,31 +35,46 @@ class MyScreen : ScreenAdapter() {
         }
 
         world.apply {
-            createBody(BodyDef().apply {
+            body = createBody(BodyDef().apply {
                 type = BodyDef.BodyType.DynamicBody
-                position.set(stage.width / 2, stage.height)
+                position.set(stage.width / 2, stage.height / 2)
             }).apply {
                 val circleShape = CircleShape().apply {
-                    radius = 0.12f
+                    radius = 0.05f
                 }
                 createFixture(FixtureDef().apply {
                     shape = circleShape
-                    density = 1f
+                    density = 10f
                     friction = 0f
                     // 这个为1也会越弹越高，
                     restitution = 1f
                 })
                 circleShape.dispose()
+                applyLinearImpulse(0.1f, -0.1f, 0f, 0f, false)
             }
             createBody(BodyDef().apply {
-                type = BodyDef.BodyType.StaticBody
                 position.set(0f, 0f)
             }).apply {
-                val edge = EdgeShape().apply {
-                    set(0f, 0.1f, stage.width, 0.1f)
-                }
+                val edge = EdgeShape()
                 createFixture(FixtureDef().apply {
-                    shape = edge
+                    shape = edge.apply {
+                        set(0f, 0f, stage.width, 0f)
+                    }
+                })
+                createFixture(FixtureDef().apply {
+                    shape = edge.apply {
+                        set(0f, stage.height, stage.width, stage.height)
+                    }
+                })
+                createFixture(FixtureDef().apply {
+                    shape = edge.apply {
+                        set(0f, 0f, 0f, stage.height)
+                    }
+                })
+                createFixture(FixtureDef().apply {
+                    shape = edge.apply {
+                        set(stage.width, 0f, stage.width, stage.height)
+                    }
                 })
                 edge.dispose()
             }
@@ -75,6 +91,9 @@ class MyScreen : ScreenAdapter() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         world.step(delta, 3, 3)
+
+        Gdx.app.log("Body", body.linearVelocity.toString())
+
         renderer.render(world, stage.camera.combined)
     }
 
